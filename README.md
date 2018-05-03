@@ -105,7 +105,7 @@ FactoryBot.define do
     todo_id nil
   end
 end
-``
+```
 ## en el archivo spec/requests/todos_spec.rb agregaremos las pruebas para las peticiones 
 ```
 require 'rails_helper'
