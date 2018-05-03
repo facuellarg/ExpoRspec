@@ -28,12 +28,12 @@ $ `mkdir spec/factories`
     `with.test_framework :rspec`\
     `with.library :rails`\
   `end`\
-`end`\
+`end`
 
 ## En el mismo archivo dentro de la funcion `RSpec.configuration do |config|`
 
 `config.include FactoryBot::Syntax::Methods`
-  &`config.before(:suite) do`\
+  &`config.before(:suite) do`\;
     `DatabaseCleaner.clean_with(:truncation)`\
     `DatabaseCleaner.strategy = :transaction`\
   `end`\
@@ -41,14 +41,15 @@ $ `mkdir spec/factories`
     `DatabaseCleaner.cleaning do`\
       `example.run`\
     `end`\
-  `end`\
+  `end`
 
 ## Creamos los modelos y corremos las migraciones generadas
 $`rails g model Todo title:string created_by:string`\
 $`rails g model Item name:string done:boolean todo:references`\
-$`rails db:migrate`\
+$`rails db:migrate`
 
 ## agregamos la siguiente configuracion en  spec/models/todo_spec.rb
+
 
 
 
