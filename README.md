@@ -1,5 +1,5 @@
 # ExpoRspec #
 
-# Primero creamos el proyecto 
+## Primero creamos el proyecto 
 $ rails new todos-api --api -T
 
