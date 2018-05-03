@@ -243,3 +243,92 @@ $`bundle exec rspec`
 
 ## Corremos 
 $`rails routes`
+
+
+## en app/controllers/todos_controller.rb pegamos las siguientes acciones 
+```
+before_action :set_todo, only: [:show, :update, :destroy]
+
+  # GET /todos
+  def index
+    @todos = Todo.all
+    json_response(@todos)
+  end
+
+  # POST /todos
+  def create
+    @todo = Todo.create!(todo_params)
+    json_response(@todo, :created)
+  end
+
+  # GET /todos/:id
+  def show
+    json_response(@todo)
+  end
+
+  # PUT /todos/:id
+  def update
+    @todo.update(todo_params)
+    head :no_content
+  end
+
+  # DELETE /todos/:id
+  def destroy
+    @todo.destroy
+    head :no_content
+  end
+
+  private
+
+  def todo_params
+    # whitelist params
+    params.permit(:title, :created_by)
+  end
+
+  def set_todo
+    @todo = Todo.find(params[:id])
+  end
+```
+
+## creamos un metodo para tener la respuesta en json 
+
+$ `touch app/controllers/concerns/response.rb`
+
+## en el archivo creado app/controllers/concerns/response.rb
+```
+module Response
+  def json_response(object, status = :ok)
+    render json: object, status: status
+  end
+end
+```
+
+## para manejar las excepciones 
+
+$ `touch app/controllers/concerns/response.rb`
+
+## en app/controllers/concerns/exception_handler.rb
+
+```
+module ExceptionHandler
+  # provides the more graceful `included` method
+  extend ActiveSupport::Concern
+
+  included do
+    rescue_from ActiveRecord::RecordNotFound do |e|
+      json_response({ message: e.message }, :not_found)
+    end
+
+    rescue_from ActiveRecord::RecordInvalid do |e|
+      json_response({ message: e.message }, :unprocessable_entity)
+    end
+  end
+end
+```
+## en app/controllers/application_controller.rb
+```
+ include Response
+ include ExceptionHandler
+```
+
+
