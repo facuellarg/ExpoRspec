@@ -33,7 +33,7 @@ $ `mkdir spec/factories`
 ## En el mismo archivo dentro de la funcion `RSpec.configuration do |config|`
 
 `config.include FactoryBot::Syntax::Methods`
-  &`config.before(:suite) do`\;
+  `config.before(:suite) do`\
     `DatabaseCleaner.clean_with(:truncation)`\
     `DatabaseCleaner.strategy = :transaction`\
   `end`\
@@ -50,7 +50,47 @@ $`rails db:migrate`
 
 ## agregamos la siguiente configuracion en  spec/models/todo_spec.rb
 
+`it { should have_many(:items).dependent(:destroy) }`\
+  `it { should validate_presence_of(:title) }`\
+  `it { should validate_presence_of(:created_by) }`
+
+## de forma similar para  spec/models/item_spec.rb
+
+`it { should belong_to(:todo) }`\
+`it { should validate_presence_of(:name) }`
+
+## ejecutamos el siguiente comando para hacer la prueba 
+
+$`bundle exec rspec`
 
 
+## en el modelo de todo app/models/todo.rb
 
+`has_many :items, dependent: :destroy`\
+`validates_presence_of :title, :created_by`
+## ahora en el modelo item app/models/item.rb
+`belongs_to :todo`\
+
+ `validates_presence_of :name
   
+## ejecutamos el siguiente comando para hacer la prueba 
+
+$`bundle exec rspec`
+
+## ahora probaremos con controladores
+$ `rails g controller Todos`\
+$ `rails g controller Items`
+
+## crearemos pruebas para peticiones, por orden se creara la siguiente carpeta y los siguientes archivo
+$ `mkdir spec/requests && touch spec/requests/{todos_spec.rb,items_spec.rb}`
+$ `touch spec/factories/{todos.rb,items.rb}`
+
+## en el archivo spec/factories/todos.rb 
+```
+FactoryBot.define do
+  factory :todo do
+    title { Faker::Lorem.word }
+    created_by { Faker::Number.number(10) }
+  end
+end
+```
