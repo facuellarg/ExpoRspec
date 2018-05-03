@@ -111,17 +111,16 @@ end
 require 'rails_helper'
 
 RSpec.describe 'Todos API', type: :request do
-  # initialize test data 
+  
   let!(:todos) { create_list(:todo, 10) }
   let(:todo_id) { todos.first.id }
 
-  # Test suite for GET /todos
   describe 'GET /todos' do
-    # make HTTP get request before each example
+
     before { get '/todos' }
 
     it 'returns todos' do
-      # Note `json` is a custom helper to parse JSON responses
+    
       expect(json).not_to be_empty
       expect(json.size).to eq(10)
     end
@@ -131,7 +130,7 @@ RSpec.describe 'Todos API', type: :request do
     end
   end
 
-  # Test suite for GET /todos/:id
+ 
   describe 'GET /todos/:id' do
     before { get "/todos/#{todo_id}" }
 
@@ -159,7 +158,7 @@ RSpec.describe 'Todos API', type: :request do
     end
   end
 
-  # Test suite for POST /todos
+
   describe 'POST /todos' do
     # valid payload
     let(:valid_attributes) { { title: 'Learn Elm', created_by: '1' } }
@@ -190,7 +189,7 @@ RSpec.describe 'Todos API', type: :request do
     end
   end
 
-  # Test suite for PUT /todos/:id
+
   describe 'PUT /todos/:id' do
     let(:valid_attributes) { { title: 'Shopping' } }
 
@@ -207,7 +206,6 @@ RSpec.describe 'Todos API', type: :request do
     end
   end
 
-  # Test suite for DELETE /todos/:id
   describe 'DELETE /todos/:id' do
     before { delete "/todos/#{todo_id}" }
 
